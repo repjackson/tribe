@@ -1,0 +1,19 @@
+.ui.card
+    .image
+        a(href="/view/#{_id}")
+            img.ui.fluid.image(src="{{c.url image_id height=400 width=800 background='white' crop='pad'}}")
+            // img.ui.medium.image(src="{{c.url image_id }}")
+    .content
+        h3.ui.red.header.make-uppercase 
+            a(href="/view/#{_id}") #{title}
+        each tags
+            .ui.compact.tiny.circular.button.deed_tag(class=deed_tag_class) #{this}
+    .extra.content
+        div Price: #{price} credits
+        div #{points} points
+    .extra.content
+        a.ui.icon.basic.button(href="/view/#{_id}") 
+            i.unhide.icon
+        if can_edit
+            a.ui.icon.basic.button(href="/edit/#{_id}") 
+                i.pencil.icon

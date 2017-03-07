@@ -1,0 +1,13 @@
+with deed
+    .ui.container
+        .ui.divided.stackable.grid
+            .ten.wide.column
+                each tags
+                    .ui.large.basic.label #{this}
+                .ui.padded.basic.segment
+                    |#{user}
+            .five.wide.column
+                if can_edit
+                    a(href="/edit/#{_id}").ui.basic.button
+                        i.pencil.icon
+                        |Edit

@@ -1,0 +1,29 @@
+.ui.borderless.pointing.menu
+    .ui.container
+        a.ui.inverted.header.item(href='/') 
+            |Tribe
+        .right.menu
+            if currentUser
+                a.icon.item(href="/dashboard" class="{{isActivePath '/dashboard'}}")
+                    | #{currentUser.karma} karma
+                a#add.plus.item
+                    i.plus.icon
+                    | Add Deed
+                a.item(href="/account/profile/edit" class="{{isActivePath '/account/profile/edit'}}")
+                    if currentUser.profile.image_id
+                        img.ui.avatar.image(src="{{c.url currentUser.profile.image_id width=30 height=30 gravity='face' crop='fill'}}")
+                    else
+                        i.user.icon
+                    if currentUser.profile.name
+                        | #{currentUser.profile.name}
+                    else
+                        | #{currentUser.username}
+                a#logout.ui.item(href='#') 
+                    i.large.sign.out.icon
+                    |Log Out
+            else
+                a.ui.item(href='/sign-in') 
+                    i.large.sign.in.icon
+                    |Log In
+    
+    

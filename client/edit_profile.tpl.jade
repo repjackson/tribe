@@ -1,0 +1,17 @@
+.ui.basic.segment.text.container
+    with person
+        .ui.form
+            .field
+                .ui.center.aligned.basic.segment
+                    if profile.image_id
+                        // label Image
+                        .ui.center.aligned.image
+                            img.ui.medium.center.aligned.image(src="{{c.url profile.image_id width=400 height=400 gravity='face' crop='fill'}}")
+                            a#remove_photo.ui.right.corner.link.label
+                                i.remove.red.link.icon
+                    else
+                        // label Image
+                        input(type='file' name='upload_picture' accept='image/*')
+            .field
+                // label Name
+                input#name(type='text' value=profile.name placeholder='Name')

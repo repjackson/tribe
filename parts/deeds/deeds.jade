@@ -1,0 +1,38 @@
+
+
+template(name='deeds')
+    .ui.container.basic.segment
+        .ui.center.aligned.header Deeds
+        .ui.four.stackable.cards
+            each deeds
+                +card_view
+        quote
+            Now as a man is like this or like that,
+            according as he acts and according as he behaves, so will he be;
+            a man of good acts will become good, a man of bad acts, bad;
+            he becomes pure by pure deeds, bad by bad deeds;
+            
+            And here they say that a person consists of desires,
+            and as is his desire, so is his will;
+            and as is his will, so is his deed;
+            and whatever deed he does, that he will reap.
+            
+            — Brihadaranyaka Upanishad, 7th Century BCE
+        
+
+
+template(name='view')
+    .ui.basic.segment
+        .content
+            a(href="/view/#{_id}")
+                .image
+                    img.ui.large.centered.image(src="{{c.url image_id }}")
+            .meta
+                each tags
+                    .ui.button.tag(class=tag_class) #{this}
+            if can_edit
+                .edit.ui.icon.basic.button
+                    i.pencil.icon.icon
+            else
+                | by #{author.username} #{when}
+            // +user_blurb
