@@ -14,7 +14,11 @@ Meteor.publish 'me', ->
     Meteor.users.find @userId,
         fields: 
             credits: 1
+            tags: 1
 
+Meteor.publish 'user_tribes', (user_id)->
+    Tribes.find
+        members: $in: [user_id]
 
 Cloudinary.config
     cloud_name: 'facet'
@@ -45,6 +49,11 @@ Deeds.allow
     update: (userId, deed) -> deed.author_id is userId or Roles.userIsInRole(userId, 'admin')
     remove: (userId, deed) -> deed.author_id is userId or Roles.userIsInRole(userId, 'admin')
 
+Tribes.allow
+    insert: (userId, tribe) -> tribe.author_id is userId
+    update: (userId, tribe) -> tribe.author_id is userId or Roles.userIsInRole(userId, 'admin')
+    remove: (userId, tribe) -> tribe.author_id is userId or Roles.userIsInRole(userId, 'admin')
+
 
 
 
@@ -60,9 +69,31 @@ Meteor.publish 'deeds', (selected_tags, filter)->
     Deeds.find match,
         limit: 5
         
+Meteor.publish 'tribes', (selected_tags, filter)->
+
+    self = @
+    match = {}
+    if selected_tags.length > 0 then match.tags = $all: selected_tags
+    # match.tags = $all: selected_tags
+    
+    if filter then match.type = filter
+
+    Tribes.find match,
+        limit: 5
+        
+        
+Meteor.publish 'tribe_members', (tribe_id)->
+    tribe = Tribes.findOne tribe_id
+    Meteor.users.find
+        _id: $in: tribe.members
+        
 
 Meteor.publish 'deed', (id)->
     Deeds.find id
+    
+    
+Meteor.publish 'tribe', (id)->
+    Tribes.find id
     
     
     

@@ -15,3 +15,14 @@
             .field
                 // label Name
                 input#name(type='text' value=profile.name placeholder='Name')
+            .field
+                label Tags to Describe Yourself (eg. 'sexy', 'painter', 'sexy painter')
+                each tags
+                    .ui.basic.button.profile_tag
+                        i.minus.icon
+                        |#{this}
+                .ui.left.icon.four.wide.input
+                    i.add.icon
+                    input#add_tag(type='text' placeholder='Add Tag' maxlength='50')
+            #save_profile.ui.green.button Save Profile
+            

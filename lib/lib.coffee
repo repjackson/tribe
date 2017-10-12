@@ -1,11 +1,3 @@
-FlowRouter.notFound =
-    subscriptions: ->
-    action: ->
-        BlazeLayout.render 'layout',
-            main: '404'
-
-
-
 AccountsTemplates.configure
     defaultLayout: 'layout'
     # defaultLayoutRegions:
@@ -45,14 +37,14 @@ AccountsTemplates.addFields [
         required: true
         minLength: 3
     }
-    {
-        _id: 'email'
-        type: 'email'
-        required: false
-        displayName: 'email'
-        re: /.+@(.+){2,}\.(.+){2,}/
-        errStr: 'Invalid email'
-    }
+    # {
+    #     _id: 'email'
+    #     type: 'email'
+    #     required: false
+    #     displayName: 'email'
+    #     re: /.+@(.+){2,}\.(.+){2,}/
+    #     errStr: 'Invalid email'
+    # }
     {
         _id: 'username_and_email'
         type: 'text'

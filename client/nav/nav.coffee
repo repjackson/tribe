@@ -1,16 +1,10 @@
 Template.nav.onCreated ->
-    self = @
-    self.autorun ->
-        self.subscribe 'me'
+    @autorun => Meteor.subscribe 'me'
 
 
 
 Template.nav.events
     'click #logout': -> AccountsTemplates.logout()
-
-    'click #add': ->
-        Meteor.call 'add', (err,id)->
-            FlowRouter.go "/edit/#{id}"
 
     'keyup #search': (e,t)->
         e.preventDefault()

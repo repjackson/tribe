@@ -1,0 +1,35 @@
+
+
+template(name='tribes')
+    .ui.center.aligned.header Tribes
+    .ui.stackable.grid
+        .four.wide.column
+            #add_tribe.ui.basic.button
+                i.plus.icon
+                |Add Tribe
+        .twelve.wide.column
+            .ui.stackable.cards
+                each tribes
+                    +tribe_card_view
+
+
+template(name='tribe_card_view')
+    .ui.card
+        .content
+            .header #{name}
+            a(href="/view/#{_id}")
+                .image
+                    img.ui.large.centered.image(src="{{c.url image_id }}")
+            .meta
+                each tags
+                    .ui.button.tag(class=tag_class) #{this}
+            .meta
+                |Member Count: #{members.length}
+            if can_edit
+                .edit.ui.icon.basic.button
+                    i.pencil.icon.icon
+            else
+                | by #{author.username} #{when}
+            a.ui.basic.button(href="/view_tribe/#{_id}")
+                |View Tribe
+                i.right.arrow.icon

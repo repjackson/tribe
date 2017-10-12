@@ -15,7 +15,7 @@ Deeds.helpers
     author: -> Meteor.users.findOne @author_id
     when: -> moment(@timestamp).fromNow()
 
-FlowRouter.route '/', action: (params) ->
+FlowRouter.route '/deeds', action: (params) ->
     BlazeLayout.render 'layout',
         cloud: 'cloud'
         main: 'deeds'
