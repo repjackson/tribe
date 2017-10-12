@@ -31,7 +31,6 @@ kadira:flow-router
 kadira:blaze-layout
 accounts-base@1.3.4
 mizzao:autocomplete
-iandouglas:accounts-ui-semantic-ui
 zimme:active-route
 useraccounts:flow-routing
 useraccounts:semantic-ui
@@ -39,7 +38,6 @@ lepozepo:cloudinary
 reactive-var@1.0.11
 kevohagan:sweetalert
 matb33:collection-hooks
-alanning:roles
 momentjs:moment
 raix:handlebar-helpers
 dynamic-import

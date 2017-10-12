@@ -1,8 +1,5 @@
 @Tags = new Meteor.Collection 'tags'
 
-
-
-
 if Meteor.isClient
     @selected_tags = new ReactiveArray []
     
@@ -72,6 +69,6 @@ if Meteor.isClient
             selected_tags.push deed.name
             $('#search').val ''
 
-        'click #add': ->
-            Meteor.call 'add', (err,id)->
-                FlowRouter.go "/edit/#{id}"
+        # 'click #add': ->
+        #     Meteor.call 'add', (err,id)->
+        #         FlowRouter.go "/edit/#{id}"

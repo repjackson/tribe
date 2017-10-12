@@ -1,19 +1,22 @@
-FlowRouter.route '/edit/:deed_id', action: (params) ->
+FlowRouter.route '/edit_deed/:deed_id', action: (params) ->
     BlazeLayout.render 'layout',
-        main: 'edit'
+        main: 'edit_deed'
 
 
 
 if Meteor.isClient
-    Template.edit.onCreated ->
+    Template.edit_deed.onCreated ->
         @autorun -> Meteor.subscribe 'deed', FlowRouter.getParam('deed_id')
+        @autorun -> Meteor.subscribe 'usernames'
     
     
-    Template.edit.helpers
-        deed: ->
-            Deeds.findOne FlowRouter.getParam('deed_id')
+    Template.edit_deed.helpers
+        deed: -> Deeds.findOne FlowRouter.getParam('deed_id')
         
-    
+        users: ->
+            Meteor.users.find
+                _id: $in: @user_ids
+        
         settings: -> {
             position: 'bottom'
             limit: 10
@@ -28,9 +31,9 @@ if Meteor.isClient
         }
 
             
-    Template.edit.events
+    Template.edit_deed.events
         'click #save': ->
-            FlowRouter.go "/view/#{FlowRouter.getParam('deed_id')}"
+            FlowRouter.go "/view_tribe/#{@tribe_id}"
 
 
         'keydown #add_tag': (e,t)->
@@ -49,8 +52,12 @@ if Meteor.isClient
             $('#add_tag').val(tag)
 
 
-        'autocompleteselect #search': (event, template, doc) ->
-            console.log 'selected ', doc
+        'autocompleteselect #search': (event, template, user) ->
+            console.log 'selected ', user
             Deeds.update FlowRouter.getParam('deed_id'),
-                $set: 
-                    user: doc._id
+                $addToSet: 
+                    user_ids: user._id
+
+        'click .remove_user': ->
+            Deeds.update FlowRouter.getParam('deed_id'),
+                $pull: user_ids: @_id

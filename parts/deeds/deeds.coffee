@@ -14,48 +14,45 @@ Deeds.after.update ((userId, deed, fieldNames, modifier, options) ->
 Deeds.helpers
     author: -> Meteor.users.findOne @author_id
     when: -> moment(@timestamp).fromNow()
+    tribe: -> Tribes.findOne @tribe_id
 
 FlowRouter.route '/deeds', action: (params) ->
     BlazeLayout.render 'layout',
-        cloud: 'cloud'
         main: 'deeds'
 
 Meteor.methods
-    add: (tags=[])->
+    log_deed: (tribe_id)->
         id = Deeds.insert
-            tags: tags
+            tribe_id: tribe_id
         return id
 
 
 if Meteor.isClient
-    Template.deeds.onCreated -> 
-        @autorun -> Meteor.subscribe('deeds', selected_tags.array())
+    Template.tribe_deeds.onCreated -> 
+        @autorun => Meteor.subscribe('tribe_deeds', @data.tribe_id)
 
-    Template.deeds.helpers
-        deeds: -> 
-            Deeds.find { }, 
-                sort:
-                    tag_count: 1
-                limit: 5
+    Template.tribe_deeds.helpers
+        tribe_deeds: -> Deeds.find tribe_id: Template.currentData().tribe_id
     
         tag_class: -> if @valueOf() in selected_tags.array() then 'primary' else 'basic'
 
 
     
-    Template.view.helpers
+    Template.deed_card.helpers
         is_author: -> Meteor.userId() and @author_id is Meteor.userId()
     
         tag_class: -> if @valueOf() in selected_tags.array() then 'primary' else 'basic'
     
         when: -> moment(@timestamp).fromNow()
 
-    Template.view.events
+    Template.deed_card.events
         'click .tag': -> if @valueOf() in selected_tags.array() then selected_tags.remove(@valueOf()) else selected_tags.push(@valueOf())
-    
-        'click .edit': -> FlowRouter.go("/edit/#{@_id}")
+        'click .edit': -> FlowRouter.go("/edit_deed/#{@_id}")
 
-    Template.deeds.events
-        'click #add': ->
-            Meteor.call 'add', (err,id)->
-                FlowRouter.go "/edit/#{id}"
 
+if Meteor.isServer
+    Meteor.publish 'tribe_deeds', (tribe_id)->
+        self = @
+        Deeds.find
+            tribe_id: tribe_id
+            

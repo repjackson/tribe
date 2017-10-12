@@ -7,6 +7,12 @@ with deed
                 .ui.left.icon.input
                     i.search.icon
                     +inputAutocomplete settings=settings id="search" class="" autocomplete="off"
+                .ui.header Tribe Members
+                .ui.list
+                    each users
+                        .item 
+                            |#{username}
+                            i.large.link.red.remove.icon.remove_user 
             .field
                 label Tags to Describe Deed
                 each tags

@@ -26,7 +26,12 @@ Cloudinary.config
     api_secret: Meteor.settings.cloudinary_secret
 
 
-
+Meteor.publish 'usernames', ->
+    Meteor.users.find {},
+        fields:
+            username: 1
+            profile: 1
+            tags: 1
     
 
 
@@ -45,30 +50,28 @@ Meteor.publish 'people', (selected_tags)->
 
 
 Deeds.allow
-    insert: (userId, deed) -> deed.author_id is userId
-    update: (userId, deed) -> deed.author_id is userId or Roles.userIsInRole(userId, 'admin')
-    remove: (userId, deed) -> deed.author_id is userId or Roles.userIsInRole(userId, 'admin')
+    insert: (userId, deed) -> true
+    update: (userId, deed) -> true
+    remove: (userId, deed) -> true
 
 Tribes.allow
-    insert: (userId, tribe) -> tribe.author_id is userId
-    update: (userId, tribe) -> tribe.author_id is userId or Roles.userIsInRole(userId, 'admin')
-    remove: (userId, tribe) -> tribe.author_id is userId or Roles.userIsInRole(userId, 'admin')
+    insert: (userId, tribe) -> true
+    update: (userId, tribe) -> true
+    remove: (userId, tribe) -> true
+
+# Deeds.allow
+#     insert: (userId, deed) -> deed.author_id is userId
+#     update: (userId, deed) -> deed.author_id is userId or Roles.userIsInRole(userId, 'admin')
+#     remove: (userId, deed) -> deed.author_id is userId or Roles.userIsInRole(userId, 'admin')
+
+# Tribes.allow
+#     insert: (userId, tribe) -> tribe.author_id is userId
+#     update: (userId, tribe) -> tribe.author_id is userId or Roles.userIsInRole(userId, 'admin')
+#     remove: (userId, tribe) -> tribe.author_id is userId or Roles.userIsInRole(userId, 'admin')
 
 
 
 
-Meteor.publish 'deeds', (selected_tags, filter)->
-
-    self = @
-    match = {}
-    if selected_tags.length > 0 then match.tags = $all: selected_tags
-    # match.tags = $all: selected_tags
-    
-    if filter then match.type = filter
-
-    Deeds.find match,
-        limit: 5
-        
 Meteor.publish 'tribes', (selected_tags, filter)->
 
     self = @
@@ -97,12 +100,12 @@ Meteor.publish 'tribe', (id)->
     
     
     
-Meteor.publish 'tags', (selected_tags)->
+Meteor.publish 'deed_tags', (selected_tags)->
     self = @
     match = {}
     if selected_tags.length > 0 then match.tags = $all: selected_tags
 
-    cloud = Deeds.aggregate [
+    deed_cloud = Deeds.aggregate [
         { $match: match }
         { $project: "tags": 1 }
         { $unwind: "$tags" }
@@ -116,10 +119,10 @@ Meteor.publish 'tags', (selected_tags)->
     # console.log 'filter: ', filter
     # console.log 'cloud: ', cloud
 
-    cloud.forEach (tag, i) ->
-        self.added 'tags', Random.id(),
-            name: tag.name
-            count: tag.count
+    deed_cloud.forEach (deed_tag, i) ->
+        self.added 'deed_tags', Random.id(),
+            name: deed_tag.name
+            count: deed_tag.count
             index: i
 
     self.ready()
