@@ -2,12 +2,13 @@
 
 template(name='needs')
     .ui.container.basic.segment
-        .ui.center.aligned.header needs
         .ui.grid
-            .four.wide.column
-                #add_need.ui.button add
+            .two.wide.column
+                #add_need.ui.icon.button
+                    i.large.plus.icon
+            .fourteen.wide.column
+                h3.ui.center.aligned.header i need...
                 +cloud
-            .twelve.wide.column
                 .ui.stackable.cards
                     each needs
                         +need_card
@@ -18,8 +19,6 @@ template(name='need_card')
             .meta
                 each tags
                     .ui.button.need_tag(class=need_tag_class) #{this}
-            .description
-                |#{description}
         .content
             | by #{author.username} #{when}
         .content

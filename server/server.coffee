@@ -60,6 +60,9 @@ Needs.allow
 Meteor.publish 'need', (id)->
     Needs.find id
     
+Meteor.publish 'user', (user_id)->
+    Meteor.users.find user_id
+    
     
 Meteor.publish 'tags', (selected_tags)->
     self = @

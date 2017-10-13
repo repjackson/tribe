@@ -28,6 +28,8 @@ Meteor.methods
 if Meteor.isClient
     Template.needs.onCreated -> 
         @autorun => Meteor.subscribe('needs', selected_tags.array())
+    Template.need_card.onCreated -> 
+        @autorun => Meteor.subscribe('user',  @data.author_id)
 
     Template.needs.helpers
         needs: -> Needs.find {}

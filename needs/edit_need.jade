@@ -1,0 +1,19 @@
+template(name='edit_need')
+    with need
+        .ui.container.basic.segment
+            // .ui.center.aligned.header edit need
+            .ui.form
+                .inline.field
+                    label i need 
+                    each tags
+                        .ui.button.need_tag
+                            i.minus.icon
+                            |#{this}
+                    .ui.left.icon.four.wide.input
+                        i.add.icon
+                        input#add_tag(type='text' maxlength='50')
+                    if tags
+                        #save.ui.big.icon.button 
+                            i.large.check.icon
+                    #delete.ui.icon.button
+                        i.large.remove.icon
