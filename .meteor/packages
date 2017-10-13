@@ -34,9 +34,7 @@ mizzao:autocomplete
 zimme:active-route
 useraccounts:flow-routing
 useraccounts:semantic-ui
-lepozepo:cloudinary
 reactive-var@1.0.11
-kevohagan:sweetalert
 matb33:collection-hooks
 momentjs:moment
 raix:handlebar-helpers

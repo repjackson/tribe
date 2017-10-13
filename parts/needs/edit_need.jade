@@ -1,0 +1,25 @@
+template(name='edit_need')
+    with need
+        .ui.container.basic.segment
+            .ui.center.aligned.header edit need
+            .ui.form
+                // .field
+                //     label Person
+                //     .ui.left.icon.input
+                //         i.search.icon
+                //         +inputAutocomplete settings=settings id="search" class="" autocomplete="off"
+                .field
+                    label tags
+                    each tags
+                        .ui.button.need_tag
+                            i.minus.icon
+                            |#{this}
+                    .ui.left.icon.four.wide.input
+                        i.add.icon
+                        input#add_tag(type='text' maxlength='50')
+                .field
+                    label description
+                    textarea#need_description(rows='5')
+                        |#{description}
+                if tags
+                    #save.ui.button save

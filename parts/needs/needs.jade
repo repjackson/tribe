@@ -1,0 +1,29 @@
+
+
+template(name='needs')
+    .ui.container.basic.segment
+        .ui.center.aligned.header needs
+        .ui.grid
+            .four.wide.column
+                #add_need.ui.button add
+            .twelve.wide.column
+                .ui.stackable.cards
+                    each needs
+                        +need_card
+
+template(name='need_card')
+    .ui.card
+        .content
+            .meta
+                each tags
+                    .ui.button.need_tag(class=need_tag_class) #{this}
+            .description
+                |#{description}
+        .content
+            | by #{author.username} #{when}
+        .content
+            a.ui.icon.button(href="/view_need/#{_id}") 
+                i.right.arrow.icon
+            if can_edit
+                a.ui.icon.button(href="/edit_need/#{_id}")
+                    i.pencil.icon.icon

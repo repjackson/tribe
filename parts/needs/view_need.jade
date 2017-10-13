@@ -1,0 +1,10 @@
+template(name='view_need')
+    with need
+        each tags
+            .ui.large.label #{this}
+        .ui.padded.segment
+            |#{description}
+        .ui.header by #{author.username}
+        if can_edit
+            a.ui.icon.large.button(href="/edit_need/#{_id}")
+                i.pencil.icon

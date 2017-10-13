@@ -1,7 +1,7 @@
 Meteor.users.allow
-    update: (userId, deed, fields, modifier) ->
-        # console.log 'user ' + userId + 'wants to modify deed' + deed._id
-        if userId and deed._id == userId
+    update: (userId, need, fields, modifier) ->
+        # console.log 'user ' + userId + 'wants to modify need' + need._id
+        if userId and need._id == userId
             # console.log 'user allowed to modify own account'
             true
 
@@ -16,14 +16,10 @@ Meteor.publish 'me', ->
             credits: 1
             tags: 1
 
-Meteor.publish 'user_tribes', (user_id)->
-    Tribes.find
-        members: $in: [user_id]
-
-Cloudinary.config
-    cloud_name: 'facet'
-    api_key: Meteor.settings.cloudinary_key
-    api_secret: Meteor.settings.cloudinary_secret
+# Cloudinary.config
+#     cloud_name: 'facet'
+#     api_key: Meteor.settings.cloudinary_key
+#     api_secret: Meteor.settings.cloudinary_secret
 
 
 Meteor.publish 'usernames', ->
@@ -49,63 +45,28 @@ Meteor.publish 'people', (selected_tags)->
 
 
 
-Deeds.allow
-    insert: (userId, deed) -> true
-    update: (userId, deed) -> true
-    remove: (userId, deed) -> true
-
-Tribes.allow
-    insert: (userId, tribe) -> true
-    update: (userId, tribe) -> true
-    remove: (userId, tribe) -> true
-
-# Deeds.allow
-#     insert: (userId, deed) -> deed.author_id is userId
-#     update: (userId, deed) -> deed.author_id is userId or Roles.userIsInRole(userId, 'admin')
-#     remove: (userId, deed) -> deed.author_id is userId or Roles.userIsInRole(userId, 'admin')
-
-# Tribes.allow
-#     insert: (userId, tribe) -> tribe.author_id is userId
-#     update: (userId, tribe) -> tribe.author_id is userId or Roles.userIsInRole(userId, 'admin')
-#     remove: (userId, tribe) -> tribe.author_id is userId or Roles.userIsInRole(userId, 'admin')
+Needs.allow
+    insert: (userId, need) -> true
+    update: (userId, need) -> true
+    remove: (userId, need) -> true
 
 
+# Needs.allow
+#     insert: (userId, need) -> need.author_id is userId
+#     update: (userId, need) -> need.author_id is userId or Roles.userIsInRole(userId, 'admin')
+#     remove: (userId, need) -> need.author_id is userId or Roles.userIsInRole(userId, 'admin')
 
 
-Meteor.publish 'tribes', (selected_tags, filter)->
-
-    self = @
-    match = {}
-    if selected_tags.length > 0 then match.tags = $all: selected_tags
-    # match.tags = $all: selected_tags
-    
-    if filter then match.type = filter
-
-    Tribes.find match,
-        limit: 5
-        
-        
-Meteor.publish 'tribe_members', (tribe_id)->
-    tribe = Tribes.findOne tribe_id
-    Meteor.users.find
-        _id: $in: tribe.members
-        
-
-Meteor.publish 'deed', (id)->
-    Deeds.find id
+Meteor.publish 'need', (id)->
+    Needs.find id
     
     
-Meteor.publish 'tribe', (id)->
-    Tribes.find id
-    
-    
-    
-Meteor.publish 'deed_tags', (selected_tags)->
+Meteor.publish 'need_tags', (selected_tags)->
     self = @
     match = {}
     if selected_tags.length > 0 then match.tags = $all: selected_tags
 
-    deed_cloud = Deeds.aggregate [
+    need_cloud = Needs.aggregate [
         { $match: match }
         { $project: "tags": 1 }
         { $unwind: "$tags" }
@@ -119,10 +80,10 @@ Meteor.publish 'deed_tags', (selected_tags)->
     # console.log 'filter: ', filter
     # console.log 'cloud: ', cloud
 
-    deed_cloud.forEach (deed_tag, i) ->
-        self.added 'deed_tags', Random.id(),
-            name: deed_tag.name
-            count: deed_tag.count
+    need_cloud.forEach (need_tag, i) ->
+        self.added 'need_tags', Random.id(),
+            name: need_tag.name
+            count: need_tag.count
             index: i
 
     self.ready()
