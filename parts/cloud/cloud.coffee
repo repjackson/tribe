@@ -4,12 +4,12 @@ if Meteor.isClient
     @selected_tags = new ReactiveArray []
     
     Template.cloud.onCreated ->
-        @autorun -> Meteor.subscribe('tags', selected_tags.array(), Template.currentData().filter)
+        @autorun -> Meteor.subscribe('tags', selected_tags.array())
     
     Template.cloud.helpers
         all_tags: ->
-            # deed_count = Deeds.find().count()
-            # if 0 < deed_count < 3 then Tags.find { count: $lt: deed_count } else Tags.find()
+            # need_count = needs.find().count()
+            # if 0 < need_count < 3 then Tags.find { count: $lt: need_count } else Tags.find()
             Tags.find()    
     
     
@@ -64,9 +64,9 @@ if Meteor.isClient
                     if val.length is 0
                         selected_tags.pop()
                         
-        'autocompleteselect #search': (event, template, deed) ->
-            # console.log 'selected ', deed
-            selected_tags.push deed.name
+        'autocompleteselect #search': (event, template, need) ->
+            # console.log 'selected ', need
+            selected_tags.push need.name
             $('#search').val ''
 
         # 'click #add': ->

@@ -50,7 +50,11 @@ if Meteor.isClient
             Needs.update FlowRouter.getParam('need_id'),
                 $pull: tags: tag
             $('#add_tag').val(tag)
-
+        
+        'click #delete': ->
+            if confirm 'delete?'
+                Needs.remove FlowRouter.getParam('need_id')
+                FlowRouter.go '/'
 
         # 'autocompleteselect #search': (event, template, user) ->
         #     console.log 'selected ', user

@@ -6,7 +6,7 @@ Meteor.users.allow
             true
 
 Accounts.onCreateUser (options, user) ->
-    user.karma = 1
+    # user.karma = 1
     user
 
 
@@ -61,7 +61,7 @@ Meteor.publish 'need', (id)->
     Needs.find id
     
     
-Meteor.publish 'need_tags', (selected_tags)->
+Meteor.publish 'tags', (selected_tags)->
     self = @
     match = {}
     if selected_tags.length > 0 then match.tags = $all: selected_tags
@@ -81,7 +81,7 @@ Meteor.publish 'need_tags', (selected_tags)->
     # console.log 'cloud: ', cloud
 
     need_cloud.forEach (need_tag, i) ->
-        self.added 'need_tags', Random.id(),
+        self.added 'tags', Random.id(),
             name: need_tag.name
             count: need_tag.count
             index: i

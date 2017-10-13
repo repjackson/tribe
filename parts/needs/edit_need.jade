@@ -22,4 +22,7 @@ template(name='edit_need')
                     textarea#need_description(rows='5')
                         |#{description}
                 if tags
-                    #save.ui.button save
+                    #save.ui.large.button 
+                        i.check.icon
+                #delete.ui.button
+                    i.remove.icon

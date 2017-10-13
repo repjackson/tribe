@@ -27,11 +27,10 @@ Meteor.methods
 
 if Meteor.isClient
     Template.needs.onCreated -> 
-        @autorun => Meteor.subscribe('needs')
+        @autorun => Meteor.subscribe('needs', selected_tags.array())
 
     Template.needs.helpers
         needs: -> Needs.find {}
-        tag_class: -> if @valueOf() in selected_tags.array() then 'primary' else 'basic'
     
     Template.needs.events
         'click #add_need': ->
@@ -40,17 +39,16 @@ if Meteor.isClient
     
     Template.need_card.helpers
         is_author: -> Meteor.userId() and @author_id is Meteor.userId()
-    
-        tag_class: -> if @valueOf() in selected_tags.array() then 'primary' else 'basic'
-    
+        need_tag_class: -> if @valueOf() in selected_tags.array() then 'active' else ''
         when: -> moment(@timestamp).fromNow()
 
     Template.need_card.events
-        'click .tag': -> if @valueOf() in selected_tags.array() then selected_tags.remove(@valueOf()) else selected_tags.push(@valueOf())
-        'click .edit': -> FlowRouter.go("/edit_need/#{@_id}")
+        'click .need_tag': -> if @valueOf() in selected_tags.array() then selected_tags.remove(@valueOf()) else selected_tags.push(@valueOf())
 
 
 if Meteor.isServer
-    Meteor.publish 'needs', ()->
+    Meteor.publish 'needs', (selected_tags)->
         self = @
-        Needs.find {}
+        match = {}
+        if selected_tags.length > 0 then match.tags = $in: selected_tags
+        Needs.find match
