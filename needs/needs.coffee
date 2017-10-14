@@ -38,7 +38,21 @@ if Meteor.isClient
         'click #add_need': ->
             Meteor.call 'add_need', (err,id)->
                 FlowRouter.go "/edit_need/#{id}"
-    
+        'click #logout': -> AccountsTemplates.logout()
+        'keyup #quick_add': (e,t)->
+            e.preventDefault
+            tag = $('#quick_add').val().toLowerCase()
+            if e.which is 13
+                if tag.length > 0
+                    split_tags = tag.match(/\S+/g)
+                    $('#quick_add').val('')
+                    Needs.insert
+                        tags: split_tags
+                    selected_tags.clear()
+                    for tag in split_tags
+                        selected_tags.push tag
+
+
     Template.need_card.helpers
         is_author: -> Meteor.userId() and @author_id is Meteor.userId()
         need_tag_class: -> if @valueOf() in selected_tags.array() then 'active' else ''

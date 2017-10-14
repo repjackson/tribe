@@ -81,7 +81,7 @@ Meteor.publish 'facet', (selected_tags, selected_author_ids)->
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 
-    console.log 'cloud: ', need_cloud
+    # console.log 'cloud: ', need_cloud
     need_cloud.forEach (need_tag, i) ->
         self.added 'tags', Random.id(),
             name: need_tag.name
