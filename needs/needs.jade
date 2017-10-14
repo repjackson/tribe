@@ -6,17 +6,18 @@ template(name='needs')
         .ui.label
             i.user.icon
             |#{currentUser.username}
-        #add_need.ui.icon.button
-            i.large.plus.icon
-        a#logout.ui.icon.button(href='#') 
+        // #add_need.ui.icon.button
+        //     i.large.plus.icon
+        a#logout.ui.icon.right.floated.button(href='#' data-tooltip='Sign Out') 
             i.large.sign.out.icon
     else
-        a.ui.item(href='/sign-in') 
+        a.ui.icon.right.floated.button(href='/sign-in' data-tooltip='Sign In') 
             i.large.sign.in.icon
-    .ui.icon.input
-        input#quick_add(type='text' placeholder='quick add')
-        i.yellow.lightning.icon
-    h2.ui.center.aligned.header i need...
+    if currentUser
+        |I need...
+        .ui.icon.input
+            input#quick_add(type='text')
+            i.plus.icon
     +tag_cloud
     +username_cloud
     .ui.stackable.centered.cards
