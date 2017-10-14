@@ -1,0 +1,30 @@
+template(name='tag_cloud')
+    .ui.basic.center.aligned.segment
+        .ui.left.icon.input
+            i.search.icon
+            +inputAutocomplete settings=settings id="search" class="" autocomplete="off"
+        if selected_tags
+            #clear_tags.ui.active.compact.big.icon.button
+                i.remove.icon
+        if selected_tags
+            each selected_tags
+                a.ui.active.compact.big.button.unselect_tag
+                    strong #{this}
+        each all_tags
+            .ui.compact.button.select_tag(class=tag_cloud_class) #{this.name}
+
+template(name='username_cloud')
+    if selected_author_ids
+        #clear_authors.ui.active.icon.circular.button
+            i.remove.icon
+        each selected_author_ids
+            .unselect_author.ui.active.circular.button
+                strong #{this}
+    each author_tags
+        .ui.circular.button.select_author(class=cloud_tag_class) 
+            // i.user.icon
+            // img.ui.avatar.image(src="{{c.url profile.image_id width=100 height=100 gravity='face' crop='fill'}}")
+            | #{username}
+            // if isInRole 'admin'
+            //     small #{this.count}
+    // .ui.divider

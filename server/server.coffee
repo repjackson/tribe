@@ -64,10 +64,11 @@ Meteor.publish 'user', (user_id)->
     Meteor.users.find user_id
     
     
-Meteor.publish 'tags', (selected_tags)->
+Meteor.publish 'facet', (selected_tags, selected_author_ids)->
     self = @
     match = {}
     if selected_tags.length > 0 then match.tags = $all: selected_tags
+    if selected_author_ids.length > 0 then match.author_id = $in: selected_author_ids
 
     need_cloud = Needs.aggregate [
         { $match: match }
@@ -80,14 +81,50 @@ Meteor.publish 'tags', (selected_tags)->
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 
-    # console.log 'filter: ', filter
-    # console.log 'cloud: ', cloud
-
+    console.log 'cloud: ', need_cloud
     need_cloud.forEach (need_tag, i) ->
         self.added 'tags', Random.id(),
             name: need_tag.name
             count: need_tag.count
             index: i
+
+    author_tag_cloud = Needs.aggregate [
+        { $match: match }
+        { $project: author_id: 1 }
+        { $group: _id: '$author_id', count: $sum: 1 }
+        { $match: _id: $nin: selected_author_ids }
+        { $sort: count: -1, _id: 1 }
+        { $limit: 20 }
+        { $project: _id: 0, text: '$_id', count: 1 }
+        ]
+
+
+    # console.log author_tag_cloud
+    
+    # author_objects = []
+    # Meteor.users.find _id: $in: author_tag_cloud.
+
+    author_tag_cloud.forEach (author_id) ->
+        self.added 'author_ids', Random.id(),
+            text: author_id.text
+            count: author_id.count
+
+
+    subHandle = Needs.find(match, {limit:20, sort: timestamp:-1}).observeChanges(
+        added: (id, fields) ->
+            # console.log 'added doc', id, fields
+            # doc_results.push id
+            self.added 'needs', id, fields
+        changed: (id, fields) ->
+            # console.log 'changed doc', id, fields
+            self.changed 'needs', id, fields
+        removed: (id) ->
+            # console.log 'removed doc', id, fields
+            # doc_results.pull id
+            self.removed 'needs', id
+    )
+
+    self.onStop ()-> subHandle.stop()
 
     self.ready()
 

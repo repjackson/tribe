@@ -1,17 +1,27 @@
 
 
 template(name='needs')
-    .ui.container.basic.segment
-        .ui.grid
-            .two.wide.column
+    .ui.hidden.divider
+    .ui.stackable.grid
+        .two.wide.column
+            if currentUser
+                .ui.label
+                    i.user.icon
+                    |#{currentUser.username}
                 #add_need.ui.icon.button
                     i.large.plus.icon
-            .fourteen.wide.column
-                h3.ui.center.aligned.header i need...
-                +cloud
-                .ui.stackable.cards
-                    each needs
-                        +need_card
+                a#logout.ui.icon.button(href='#') 
+                    i.large.sign.out.icon
+            else
+                a.ui.item(href='/sign-in') 
+                    i.large.sign.in.icon
+            +username_cloud
+        .fourteen.wide.column
+            h2.ui.center.aligned.header i need...
+            +tag_cloud
+            .ui.stackable.cards
+                each needs
+                    +need_card
 
 template(name='need_card')
     .ui.card
@@ -22,8 +32,7 @@ template(name='need_card')
         .content
             | by #{author.username} #{when}
         .content
-            a.ui.icon.button(href="/view_need/#{_id}") 
-                i.right.arrow.icon
+            // a.ui.icon. arrow.icon
             if can_edit
                 a.ui.icon.button(href="/edit_need/#{_id}")
                     i.pencil.icon.icon

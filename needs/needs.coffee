@@ -27,7 +27,7 @@ Meteor.methods
 
 if Meteor.isClient
     Template.needs.onCreated -> 
-        @autorun => Meteor.subscribe('needs', selected_tags.array())
+        @autorun -> Meteor.subscribe('facet', selected_tags.array(), selected_author_ids.array())
     Template.need_card.onCreated -> 
         @autorun => Meteor.subscribe('user',  @data.author_id)
 
@@ -48,9 +48,9 @@ if Meteor.isClient
         'click .need_tag': -> if @valueOf() in selected_tags.array() then selected_tags.remove(@valueOf()) else selected_tags.push(@valueOf())
 
 
-if Meteor.isServer
-    Meteor.publish 'needs', (selected_tags)->
-        self = @
-        match = {}
-        if selected_tags.length > 0 then match.tags = $in: selected_tags
-        Needs.find match
+# if Meteor.isServer
+#     Meteor.publish 'needs', (selected_tags)->
+#         self = @
+#         match = {}
+#         if selected_tags.length > 0 then match.tags = $in: selected_tags
+#         Needs.find match
